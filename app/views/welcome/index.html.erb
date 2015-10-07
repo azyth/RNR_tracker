@@ -1,4 +1,9 @@
-<h1>Hello gentleman, all your base are belong to us</h1>
-<%= image_tag "RedNewtRacing.png" %>
-<p>we can fit an log in  screen here. </p>
-<a href="main">LOG IN!</a><p> - without authentication</p>
+<div class="center jumbotron">
+  <h1>Hello gentleman, all your base are belong to us</h1>
+  <%= image_tag('RedNewtRacing.png', :height => 135, :width => 125) %>
+  <p>we can fit an log in  screen here. </p>
+  <%= link_to "Sign Up Now, Biatch", signup_path, class: "btn btn-lg btn-primary" %>
+  <a href="" class="btn btn-lg btn-primary">login!</a>
+  <!--<li><%= link_to "ruby link", 'main' %></li>-->
+  <!--<a href="main">LOG IN!</a><p> - without authentication</p>-->
+</div>

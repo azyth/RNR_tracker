@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'users/new'
+
   get 'welcome/main'
   get 'welcome/index'
 
@@ -9,6 +11,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get 'main' => 'welcome#main'
+  get 'signup' => 'users#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

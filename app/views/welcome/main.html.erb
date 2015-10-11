@@ -1,4 +1,7 @@
 
-<h1>Welcome#main</h1>
+<% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %>"><%= message %></div>
+<% end %>
 <%= image_tag 'map_background.png' %>
-<p>Find me in app/views/welcome/main.html.erb</p>
+
+<%= debug(params) if Rails.env.development? %>

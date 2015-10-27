@@ -2,39 +2,90 @@
 <% flash.each do |message_type, message| %>
     <div class="alert alert-<%= message_type %>"><%= message %></div>
 <% end %>
+
+<h1>Please refresh page.</h1>
 <div id="map"></div>
+
+<!-- Leaflet -->
+<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
 
 <!-- include cartodb.js library -->
 <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
 
+<style>
+    body { margin:0; padding:0; }
+    #map-canvas { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+<div id="map-canvas"></div>
+
+<!-- Tag to store rails variable that holds most recent athlete information-->
+<%= content_tag :div, class: "racers_class", data: {racers: @racers} do %>
+<% end %>
+
 <script>
     function main() {
-        cartodb.createVis('map', 'http://documentation.cartodb.com/api/v2/viz/2b13c956-e7c1-11e2-806b-5404a6a683d5/viz.json', {
-            shareable: true,
-            title: true,
-            description: true,
-            search: true,
-            tiles_loader: true,
-            center_lat: 0,
-            center_lon: 0,
-            zoom: 2
-        })
-                .done(function(vis, layers) {
-                    // layer 0 is the base layer, layer 1 is cartodb layer
-                    // setInteraction is disabled by default
-                    layers[1].setInteraction(true);
-                    layers[1].on('featureOver', function(e, latlng, pos, data) {
-                        cartodb.log.log(e, latlng, pos, data);
-                    });
-                    // you can get the native map to work with it
-                    var map = vis.getNativeMap();
-                    // now, perform any operations you need
-                    // map.setZoom(3);
-                    // map.panTo([50.5, 30.5]);
-                })
-                .error(function(err) {
-                    console.log(err);
-                });
+        var map = L.map('map-canvas', {
+            scrollWheelZoom: false,
+            center: [40.7127837, -74.0059413],
+            zoom: 3
+
+        });
+
+        var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        });
+
+        map.addLayer(layer);
+
+        function onEachFeature(feature, layer) {
+            // check if feature contains popupContent
+            if (feature.properties && feature.properties.popupContent) {
+                layer.bindPopup(feature.properties.popupContent);
+            }
+        }
+
+        // customize markers for athletes
+        var geojsonMarkerOptions = {
+            radius: 8,
+            fillColor: "#ff7800",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+
+        // get racers from rails variable
+        var features = $('.racers_class').data('racers');
+
+        // plot desired racers on map
+        var i;
+        for (i = 0; i < features.length; i++) {
+            var current_racer = features[i];
+
+            var geojsonFeature = {
+                "type": "Feature",
+                "properties": {
+                    "bib": current_racer.bib,
+                    "time": current_racer.time,
+                    "popupContent": "Racer: " + current_racer.bib + ", Time: " + current_racer.time
+                },
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [current_racer.latitude, current_racer.longitude]
+                }
+            };
+
+            L.geoJson(geojsonFeature, {
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, geojsonMarkerOptions);
+                },
+                onEachFeature: onEachFeature
+
+            }).addTo(map);
+
+        }
     }
     window.onload = main;
 </script>

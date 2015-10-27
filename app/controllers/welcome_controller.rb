@@ -10,7 +10,7 @@ class WelcomeController < ApplicationController
                                             FROM race_events
                                             GROUP BY raceid, bib ) tmp
                                      JOIN race_events r ON tmp.bib = r.bib
-                                     AND tmp.recentTime = r.time"
+                                     AND tmp.recentTime = r.time;"
   def main
     @racers = RaceEvent.find_by_sql(RECENT_UPDATE_QUERY);
   end

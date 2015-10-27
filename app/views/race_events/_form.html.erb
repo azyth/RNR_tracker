@@ -1,0 +1,37 @@
+<%= form_for(@race_event) do |f| %>
+  <% if @race_event.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@race_event.errors.count, "error") %> prohibited this race_event from being saved:</h2>
+
+      <ul>
+      <% @race_event.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :raceid %><br>
+    <%= f.text_field :raceid %>
+  </div>
+  <div class="field">
+    <%= f.label :bib %><br>
+    <%= f.number_field :bib %>
+  </div>
+  <div class="field">
+    <%= f.label :time %><br>
+    <%= f.datetime_select :time %>
+  </div>
+  <div class="field">
+    <%= f.label :latitude %><br>
+    <%= f.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= f.label :longitude %><br>
+    <%= f.text_field :longitude %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :race_events
   get 'users/new'
 
   get 'welcome/main'

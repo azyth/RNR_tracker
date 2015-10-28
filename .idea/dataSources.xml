@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="2087271861">
+  <component name="DataSourceManagerImpl" format="xml" hash="3817709546">
     <data-source source="LOCAL" name="Rails RNR_tracker: development" uuid="c2fbe74a-6971-47c9-9a1f-c5cc480e7587">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>

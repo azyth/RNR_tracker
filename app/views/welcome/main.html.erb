@@ -3,8 +3,8 @@
     <div class="alert alert-<%= message_type %>"><%= message %></div>
 <% end %>
 
-<h1>Please refresh page.</h1>
-<div id="map"></div>
+<!--<h1>Please refresh page.</h1>-->
+<!--<div="map-canvas"></div>-->
 
 <!-- Leaflet -->
 <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
@@ -13,12 +13,7 @@
 <!-- include cartodb.js library -->
 <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
 
-<style>
-    body { margin:0; padding:0; }
-    #map-canvas { position:absolute; top:0; bottom:0; width:100%; }
-</style>
-
-<div id="map-canvas"></div>
+<div id="map"></div>
 
 <!-- Tag to store rails variable that holds most recent athlete information-->
 <%= content_tag :div, class: "racers_class", data: {racers: @racers} do %>
@@ -26,7 +21,7 @@
 
 <script>
     function main() {
-        var map = L.map('map-canvas', {
+        var map = L.map('map', {
             scrollWheelZoom: false,
             center: [40.7127837, -74.0059413],
             zoom: 3

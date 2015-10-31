@@ -12,7 +12,18 @@ class WelcomeController < ApplicationController
                                      JOIN race_events r ON tmp.bib = r.bib
                                      AND tmp.recentTime = r.time;"
   def main
-    @racers = RaceEvent.find_by_sql(RECENT_UPDATE_QUERY);
+    #@racers = RaceEvent.find_by_sql(RECENT_UPDATE_QUERY);
+  end
+
+  def updated_coords
+    @racers = {}
+    @temp = RaceEvent.find_by_sql(RECENT_UPDATE_QUERY);
+
+    @temp.each do |racer|
+      key = racer.bib;
+      # => {:key=>racer}
+      @racers.store(key, racer);
+    end
   end
 
 end

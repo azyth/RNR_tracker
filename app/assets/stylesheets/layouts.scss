@@ -2,44 +2,75 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-body {
+body{
   margin: 0px;
   padding: 0px;
-  font-size: 20px;
+  font-size:20px;
+}
+#header{
+  background-color:firebrick;
+  height:60px;
+  border-bottom:1px solid black;
+}
+#header-inner{
+  width: 1000px;
+  height: 60px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header-item{
+  float:left;
+}
+#app-title{
+  float:left;
+  width:200px;
+  margin:10px;
+}
+#nav-bar{
+  width:600px;
+  float:right;
+}
+#nav-bar li{
+  display:inline;
+  font-family:sans-serif;
+  font-size:larger;
+  padding-right:20px;
+  padding-left:20px;
+  float:right;
+}
+#nav-bar a{
+  text-decoration: none;
+  color:inherit;
+  border-bottom: 2px solid black;
+}
+#nav-bar a:hover{
+  border-bottom: 2px solid white;
+}
+#user-icon{
+  margin-top:-10px;
 }
 .navbar-brand {
   font-size:40px;
 }
 .navbar{
+  min-height:75px;
   padding-top:10px;
-  margin-bottom:0px;
 }
 .navbar-default{
   background-color:firebrick;
 }
 .navbar-default .navbar-nav > li > a {
-  color: black;
+  color: #1C1C1C;
 }
 .navbar-default .navbar-nav > li > a:hover {
   color: #D8D8D8;
 }
 .navbar-default .navbar-brand {
-  color: black;
+  color: #1C1C1C;
 }
 .navbar-default .navbar-brand:hover {
   color: #D8D8D8;
 }
 #addbttn{
   margin-top:-15px;
-}
-.dropdown-menu {
-  min-width:155px;
-}
-.navbar-right .dropdown-menu {
-  right: -1px;
-  left: auto;
-}
-.navbar-form{
-  border-style:none;
-  box-shadow:none;
 }

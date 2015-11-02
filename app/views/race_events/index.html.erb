@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Race Events</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Raceid</th>
+      <th>Bib</th>
+      <th>Time</th>
+      <th>Latitude</th>
+      <th>Longitude</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @race_events.each do |race_event| %>
+      <tr>
+        <td><%= race_event.raceid %></td>
+        <td><%= race_event.bib %></td>
+        <td><%= race_event.time %></td>
+        <td><%= race_event.latitude %></td>
+        <td><%= race_event.longitude %></td>
+        <td><%= link_to 'Show', race_event %></td>
+        <td><%= link_to 'Edit', edit_race_event_path(race_event) %></td>
+        <td><%= link_to 'Destroy', race_event, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Race event', new_race_event_path %>

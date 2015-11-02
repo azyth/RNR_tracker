@@ -2,39 +2,230 @@
 <% flash.each do |message_type, message| %>
     <div class="alert alert-<%= message_type %>"><%= message %></div>
 <% end %>
-<div id="map"></div>
+
+<!--<h1>Please refresh page.</h1>-->
+<!--<div="map-canvas"></div>-->
+
+<!-- Leaflet -->
+<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
 
 <!-- include cartodb.js library -->
 <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
 
+
+
+<style>
+    .filter-ui {
+        background:#fff;
+        position:absolute;
+        top:100px;
+        right:10px;
+        z-index:100;
+        padding:10px;
+        border-radius:3px;
+    }
+
+    .container-inline {
+        display: inline-block;
+    }
+
+
+
+
+    .get-markers {
+        width:100%;
+        margin:10px 0;
+    }
+
+</style>
+
+<nav id='filter-racers' class='filter-ui'></nav>
+<div id="map"></div>
+
 <script>
     function main() {
-        cartodb.createVis('map', 'http://documentation.cartodb.com/api/v2/viz/2b13c956-e7c1-11e2-806b-5404a6a683d5/viz.json', {
-            shareable: true,
-            title: true,
-            description: true,
-            search: true,
-            tiles_loader: true,
-            center_lat: 0,
-            center_lon: 0,
+        /* ******************** Code for plotting racers on map based on selected racers ******************** */
+
+        // limit bounds for map
+        var southWest = new L.LatLng(-90, 180)
+        var northEast = new L.LatLng(90, -180);
+        var bounds = [southWest, northEast];
+
+        var map = L.map('map', {
+            scrollWheelZoom: false,
+            center: [40.7127837, -74.0059413],
             zoom: 2
-        })
-                .done(function(vis, layers) {
-                    // layer 0 is the base layer, layer 1 is cartodb layer
-                    // setInteraction is disabled by default
-                    layers[1].setInteraction(true);
-                    layers[1].on('featureOver', function(e, latlng, pos, data) {
-                        cartodb.log.log(e, latlng, pos, data);
-                    });
-                    // you can get the native map to work with it
-                    var map = vis.getNativeMap();
-                    // now, perform any operations you need
-                    // map.setZoom(3);
-                    // map.panTo([50.5, 30.5]);
-                })
-                .error(function(err) {
-                    console.log(err);
-                });
+        });
+
+        // Uncomment to create bounded rectangle on the size of the world
+//        var getBounds = function(){
+//            return new L.LatLngBounds(southWest, northEast);
+//        };
+//
+//        var onViewReset = function(e){
+//            map.setMaxBounds(map.getBounds());
+//            map.off('viewreset', onViewReset);
+//        };
+//
+//        L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
+//        map.on('viewreset', onViewReset);
+//        map.fitBounds(getBounds(), {reset: true});
+
+        var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+            bounds: bounds,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+        });
+
+        map.addLayer(layer);
+
+
+        var key = "bibs"; // defined in _header.html.erb
+        var selected_racers = JSON.parse(localStorage.getItem(key)); // view _header to see how bibs are stored
+        var racer_markers = []; // array of markers that are displayed on map
+
+        // initialize markers for selected racers so locations can be updated
+        var n;
+        for (n = 0; n < selected_racers.length; n++) {
+            var marker = L.marker([0, 0], {opacity: 0});
+            marker.addTo(map);
+            racer_markers.push(marker);
+        }
+
+        // use json located in content from html to update coordinates for racers
+        // Precondition: html page has json with racer information contained in div specified by JSON_DIV_ID
+        //               selected_racers and racer_markers are of the same length
+        function plotCoords(html) {
+            var JSON_DIV_ID = "div#racers_info";
+
+            // obtain racers information contained in div
+            var tmp = jQuery('<div>').html(html);
+            var racers_json = JSON.parse( tmp.find(JSON_DIV_ID).html() );
+            selected_racers = JSON.parse(localStorage.getItem(key)); // view _header to see how bibs are stored
+
+            // update markers for selected racers on map
+            var i;
+            for (i = 0; i < selected_racers.length; i++) {
+                var bibNo = selected_racers[i];
+                var current_racer = racers_json[bibNo];
+
+                var racer_marker = racer_markers[i];
+                racer_marker.setLatLng([current_racer.latitude, current_racer.longitude]).update();
+                racer_marker.unbindPopup();
+                racer_marker.bindPopup("Racer: " + current_racer.bib + ", Time: " + current_racer.time);
+                racer_marker.setOpacity(1);
+            }
+
+            console.log(localStorage.getItem(key));
+        }
+
+        function updateCoords() {
+            // ajax call to get racers info from another page
+            $.ajax({
+                url: "welcome/updated_coords",
+                success: plotCoords // callback handler
+            });
+            setTimeout(updateCoords, 10000); // update every 10 seconds
+        }
+
+
+
+        /* ***************** Code for filter UI that allows users to remove and deselect racers ***************** */
+
+        // find reference to filter UI and set its title
+        var filter = document.getElementById('filter-racers');
+        var title_item = filter.appendChild(document.createElement('div'));
+        var title_label = title_item.appendChild(document.createElement('label'));
+        title_label.innerHTML = "Selected Racers";
+
+        var checkboxes = [];
+        // create a filter interface.
+        for (var i = 0; i < selected_racers.length; i++) {
+            // item will contain input checkbox and label
+            var item = document.createElement('div');
+            filter.appendChild(item);
+            item.id = selected_racers[i];
+
+            // create checkbox and div to contain it
+            var checkbox_div = document.createElement('div');
+            checkbox_div.className = "container-inline";
+            item.appendChild(checkbox_div);
+            var checkbox = document.createElement('input');
+            checkbox_div.appendChild(checkbox);
+            checkbox.type = 'checkbox';
+            checkbox.id = selected_racers[i]; // bib number is id for box
+            checkbox.checked = true;
+            checkboxes.push(checkbox);
+
+            // create a label to the right of the checkbox with racer bib number
+            var label = document.createElement('label');
+            label.className = "container-inline";
+            item.appendChild(label);
+            label.innerHTML = "BibNo: " + selected_racers[i];
+            label.setAttribute('for', selected_racers[i]);
+        }
+
+        // create button to remove racers with unchecked checkbox
+        var update_item = filter.appendChild(document.createElement('div'));
+        var update_button = document.createElement('button');
+        var update_text = document.createTextNode('Update');
+        update_button.appendChild(update_text);
+        update_item.appendChild(update_button);
+        update_button.addEventListener('click', update);
+
+        // function called whenever someone clicks update button
+        // function removes racer's marker with unchecked checkbox
+        function update() {
+            var to_keep = [];
+            var to_delete_filters = []; // array to identify which divs to remove in filter UI
+            var to_delete_indices = []; // array to identify which markers to remove from map
+            var i;
+            // run through each checkbox and record whether it is checked
+            // if it is, add id (aka bibNo) to to_keep so racer marker stays on map
+            for (i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    // keep bib number associated with checkbox
+                    to_keep.push(Number(checkboxes[i].id));
+                }
+                else {
+                    to_delete_filters.push(checkboxes[i].id);
+                    to_delete_indices.push(i);
+
+                    console.log("Going to delete index: " + i);
+                    console.log("Going to delete id: " + checkboxes[i].id);
+                }
+            }
+
+            // delete racer from map and checkbox and label from filter UI
+            var orig_len = to_delete_filters.length;
+            for (i = 0; i < orig_len; i++) {
+                // need to delete starting from end of list so indices do not get mixed up
+                var index = orig_len - (i + 1);
+
+                // delete marker from map
+                var racer_marker = racer_markers[to_delete_indices[index]];
+                racer_markers.splice(to_delete_indices[index], 1);
+                map.removeLayer(racer_marker);
+
+                // delete checkbox referencing marker from filter
+                var checkbox_marker = to_delete_indices[index];
+                checkboxes.splice(checkbox_marker, 1);
+
+                // delete div from filter
+                var div_marker = document.getElementById(to_delete_filters[index].toString());
+                div_marker.remove();
+
+                console.log("Going to delete index: " + to_delete_indices[index]);
+                console.log("Going to delete id: " + to_delete_filters[index]);
+            }
+
+            localStorage.setItem(key, JSON.stringify(to_keep));
+            console.log(localStorage.getItem(key));
+
+            alert("Check console log from browser to view selected bibs. update")
+        }
+
+        updateCoords();
     }
     window.onload = main;
 </script>

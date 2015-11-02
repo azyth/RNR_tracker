@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
+  resources :race_events
   get 'users/new'
 
   get 'welcome/main'
   get 'welcome/index'
 
+  get 'race_events/index'
+  get 'welcome/updated_coords'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -12,6 +15,8 @@ Rails.application.routes.draw do
   root 'welcome#index'
   get 'main' => 'welcome#main'
   get 'signup' => 'users#new'
+
+  get 'coords' => 'welcome#updated_coords'
   resources :users
 
   # Example of regular route:

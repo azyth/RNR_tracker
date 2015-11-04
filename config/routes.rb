@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get 'main' => 'welcome#main'
+  get 'index' => 'welcome#index'
   get 'signup' => 'users#new'
   resources :users
 

@@ -1,10 +1,83 @@
-<div class="center jumbotron">
-  <h1>Hello gentleman</h1>
-  <%= image_tag('RedNewtRacing.png', :height => 135, :width => 125) %>
-  <p>All your bass are belong to us.</p>
-  <%= link_to "Sign Up Now, Biatch", signup_path, class: "btn btn-lg btn-primary" %>
+<div id="cover" class="center jumbotron">
+  <%= image_tag('logo.png', :height =>200, :width => 200, :class=> "logo") %>
+  <h2>RedRunner: Athlete Tracking App</h2>
+  <br><p>Spectate athletes in real time!</p>
+  <!--<%= link_to "Sign Up Now, Biatch", signup_path, class: "btn btn-lg btn-primary" %>
   <a href="main" class="btn btn-lg btn-primary">login!</a>
   <!--<li><%= link_to "ruby link", 'main' %></li>-->
   <!--<a href="main">LOG IN!</a><p> - without authentication</p>-->
-  <%= debug(params) if Rails.env.development? %>
 </div>
+
+<div class="container" style="padding-bottom:40px;border-bottom:1px solid #aaa;">
+  <a class="anchor" id="about"></a>
+  <h2>About</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        Tired of not knowing when your athlete will run by on race day? RedRunner gives real time updates of their GPS
+        location so you know when to be alert and on the lookout to cheer them on. As long as athletes carry their
+        phones using our mobile app, you can see where they are simply by using our "Spectator Map" on our website!
+      </p>
+    </div>
+    <div class="col-md-4" style="border:1px solid black;">
+      //mobile app screen-shot
+    </div>
+    <div class="col-md-4" style="border:1px solid black;">
+      //map screenshot
+    </div>
+  </div>
+</div>
+
+
+<div class="container" style="margin-top:20px;">
+  <a class="anchor" id="getstarted"></a>
+  <h2>Get Started</h2>
+  <h3>Follow 3 easy steps!</h3>
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-md-6">
+      <h3 style="font-weight:bold;">Athletes</h3>
+      <ol>
+        <li><span class="step">Download</span>:
+            <br>Use the link below to download the Android application</li>
+        <li><span class="step">Register</span>:
+            <br>Open the app and your enter your name and BIB number</li>
+        <li><span class="step">Start Tracking</span>:
+            <br>Press the start button when the race begins</li>
+      </ol>
+        <p><a class="btn btn-danger" href="#" role="button">Download RedRunner</a></p>
+    </div>
+    <div class="col-md-6" style="border-left:1px solid #aaa">
+      <h3 style="font-weight:bold;">Spectator</h3>
+      <ol>
+        <li><span class="step">Open map</span>:
+            <br>Click on "Spectator Map" below or on top navigation bar</li>
+        <li><span class="step">Select Race</span>:
+            <br>Use the race selector on the map to choose the race</li>
+        <li><span class="step">Select Athlete</span>:
+            <br>Enter the athlete's bib number that you want to spectate</li>
+      </ol>
+      <p><a class="btn btn-danger" href="main" role="button">Spectator Map</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel">Frequently Asked Questions</h2>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<%= debug(params) if Rails.env.development? %>-->

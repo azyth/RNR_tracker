@@ -7,12 +7,17 @@ body {
   padding: 0px;
   font-size: 20px;
 }
+h2{
+  font-weight:bold;
+  font-size:36px;
+}
 .navbar-brand {
   font-size:40px;
 }
 .navbar{
   padding-top:10px;
   margin-bottom:0px;
+  z-index: 100000;
 }
 .navbar-default{
   background-color:firebrick;
@@ -27,7 +32,8 @@ body {
   color: black;
 }
 .navbar-default .navbar-brand:hover {
-  color: #D8D8D8;
+  color: black;
+  cursor:default;
 }
 #addbttn{
   margin-top:-15px;
@@ -42,4 +48,29 @@ body {
 .navbar-form{
   border-style:none;
   box-shadow:none;
+}
+.btn-danger{
+  background-color:firebrick;
+}
+.logo{
+ // background-color:firebrick;
+}
+.step{
+  text-decoration: underline;
+  text-decoration-color:firebrick;
+}
+.modal{
+  margin-top:60px;
+}
+a.anchor {
+  display: block;
+  position: relative;
+  top: -75px;
+  visibility: hidden;
+}
+#cover{
+  background-image:url(cover.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  color:black;
 }

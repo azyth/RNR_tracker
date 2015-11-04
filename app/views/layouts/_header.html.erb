@@ -8,14 +8,20 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <div class="navbar-brand" style="padding-top:0px;">
+      <div class="navbar-brand" href="#" style="padding-top:0px;">
         <%= image_tag('logo.png', :width => 50, :height =>50) %>
         RedRunner
       </div>
     </div>
 
-
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+      <!--<form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input id="bibNo" type="text" class="form-control" placeholder="Search Athlete by Bib#" required>
+        </div>
+        <button id="addbttn" type="submit" class="btn btn-default" onclick="displayBib()">Add to Map</button>
+      </form>-->
       <ul class="nav navbar-nav navbar-right">
         <li><a href="index#about">About</a></li>
         <li><a href="index#getstarted">Get Started</a></li>
@@ -23,36 +29,53 @@
         <li><a href="#" data-toggle="modal" data-target="#myModal">FAQs</a></li>
       </ul>
     </div>
-
-
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">About</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Race<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Race 1</a></li>
-            <li><a href="#">Race 2</a></li>
-            <li><a href="#">Race 3</a></li>
-            <li><a href="#">Race 4</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Select Athlete<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Firstnam Lastname</a></li>
-            <li><form class="navbar-form" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Enter Athlete Name">
-              </div>
-            </form></li>
-          </ul>
-        </li>
-        <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Sign In</a></li>
-      </ul>
-    </div>--><!-- /.navbar-collapse -->
+    <!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+
+<script language="javascript" type="text/javascript">
+
+    function isInArray(value, array) {
+        return array.indexOf(value) > -1;
+    }
+
+    function displayBib() {
+        var key = "bibs";
+
+        // initialize array to store bibs if not yet created
+        if (localStorage.getItem(key) === null) {
+            var bibs = [];
+            localStorage.setItem(key, JSON.stringify(bibs));
+        }
+
+        var bibNo = Number( document.getElementById("bibNo").value );
+
+        if (bibNo == null || isNaN(bibNo)) {
+            alert("Please enter a number.");
+        }
+
+        else if (document.getElementById("bibNo").value == "") {
+            // pass, let popup tell user to fill in text box
+        }
+
+        else {
+            // retrieve array of selected bibs
+            var storedBibs = JSON.parse(localStorage.getItem(key));
+
+            // store new bibs in array
+            if (!isInArray(bibNo, storedBibs)) {
+                storedBibs.push(bibNo);
+                localStorage.setItem(key, JSON.stringify(storedBibs));
+                console.log(localStorage.getItem(key));
+                alert("Check console log from browser to view selected bibs.")
+            }
+
+            else {
+                alert("Athlete has already been added to map.");
+            }
+        }
+    }
+</script>
+
 <div style="height:60px;"></div>

@@ -1,0 +1,7 @@
+<!-- Tag to store rails variable that holds most recent athlete information-->
+<%= content_tag :div, class: "coords_class", data: {racers: @racers} do %>
+<% end %>
+
+<div id="racers_info">
+  <%= @racers.to_json %>
+</div>

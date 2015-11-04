@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Raceid:</strong>
+  <%= @race_event.raceid %>
+</p>
+
+<p>
+  <strong>Bib:</strong>
+  <%= @race_event.bib %>
+</p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @race_event.time %>
+</p>
+
+<p>
+  <strong>Latitude:</strong>
+  <%= @race_event.latitude %>
+</p>
+
+<p>
+  <strong>Longitude:</strong>
+  <%= @race_event.longitude %>
+</p>
+
+<%= link_to 'Edit', edit_race_event_path(@race_event) %> |
+<%= link_to 'Back', race_events_path %>

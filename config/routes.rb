@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'sessions/new'
+
   resources :race_events
   get 'users/new'
 
@@ -16,6 +18,10 @@ Rails.application.routes.draw do
   get 'main' => 'welcome#main'
   get 'index' => 'welcome#index'
   get 'signup' => 'users#new'
+
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
 
   get 'coords' => 'welcome#updated_coords'
   resources :users

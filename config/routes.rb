@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :racers do
+    collection { post :import}
+  end
   resources :race_events
   get 'users/new'
 
@@ -8,14 +11,16 @@ Rails.application.routes.draw do
   get 'race_events/index'
   get 'welcome/updated_coords'
 
+  get 'racers/new'
+  get 'racers/upload_racers'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  root 'welcome#main'
   get 'main' => 'welcome#main'
   get 'signup' => 'users#new'
-
   get 'coords' => 'welcome#updated_coords'
   resources :users
 

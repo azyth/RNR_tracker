@@ -1,0 +1,37 @@
+<%= flash[:notice] %>
+<table style="width: 75%">
+  <thead>
+  <tr>
+    <th>Email</th>
+    <th>Race ID</th>
+    <th>Bib Number</th>
+    <th>Is Current?</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @racers.each do |racer| %>
+      <tr>
+        <td><%= racer.email %></td>
+        <td><%= racer.raceid %></td>
+        <td><%= racer.bib %></td>
+        <td><%= racer.iscurrent %></td>
+        <td><%= link_to 'Show', racer %></td>
+        <td><%= link_to 'Edit', edit_racer_path(racer) %></td>
+        <td><%= link_to 'Destroy', { action: :destroy, id: racer.id }, method: :delete, data: {confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<br><br><hr>
+<div>
+  <h3>Upload Racer List</h3>
+  <%= form_tag import_racers_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import CSV" %>
+  <% end %>
+</div>
+
+<br>
+
+<%= link_to 'Add New Racer', new_racer_path %>

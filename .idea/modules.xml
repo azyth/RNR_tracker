@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/RNR_tracker.iml" filepath="$PROJECT_DIR$/.idea/RNR_tracker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/RedRunner.iml" filepath="$PROJECT_DIR$/.idea/RedRunner.iml" />
     </modules>
   </component>
 </project>

@@ -3,8 +3,12 @@ class RacersController < ApplicationController
 
   # Racer List Upload Function
   def import
-    Racer.import(params[:file])
-    redirect_to racers_path, notice: "Racers uploaded successfully!\n"
+    begin
+      Racer.import(params[:file])
+      redirect_to racers_path, notice: "Racers uploaded successfully!\n"
+    rescue
+      redirect_to root_url, notice: "Invalid CSV file format."
+    end
   end
 
   # GET /racers
@@ -47,7 +51,11 @@ class RacersController < ApplicationController
   # PATCH/PUT /racers/1.json
   def update
     respond_to do |format|
-      if @racer.update(racer_params)
+      newatts = "email,"     + params[:racer][:email]     + "," +
+                "raceid,"    + params[:racer][:raceid]    + "," +
+                "bib,"       + params[:racer][:bib]       + "," +
+                "iscurrent," + params[:racer][:iscurrent]
+      if @racer.update(Hash[*newatts.split(',')])
         format.html { redirect_to @racer, notice: 'Racer was successfully updated.' }
         format.json { render :show, status: :ok, location: @racer }
       else

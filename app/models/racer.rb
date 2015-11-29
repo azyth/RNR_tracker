@@ -11,6 +11,7 @@ class Racer < ActiveRecord::Base
       else
         Racer.create!(racer_hash)
       end # end if !racer.nil?
+
     end # end CSV.foreach
   end # end self.import(file)
 end

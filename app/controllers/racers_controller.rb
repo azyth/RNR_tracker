@@ -5,9 +5,9 @@ class RacersController < ApplicationController
   def import
     begin
       Racer.import(params[:file])
-      redirect_to racers_path, notice: "Racers uploaded successfully!\n"
+      redirect_to racers_path, notice: "Racers uploaded successfully!"
     rescue
-      redirect_to root_url, notice: "Invalid CSV file format."
+      redirect_to racers_path, notice: "Invalid CSV file format."
     end
   end
 
@@ -34,7 +34,12 @@ class RacersController < ApplicationController
   # POST /racers
   # POST /racers.json
   def create
-    @racer = Racer.new(racer_params)
+    newatts = "email,"     + params[:racer][:email]     + "," +
+              "raceid,"    + params[:racer][:raceid]    + "," +
+              "bib,"       + params[:racer][:bib]       + "," +
+              "iscurrent," + params[:racer][:iscurrent]
+
+    @racer = Racer.new(Hash[*newatts.split(',')])
 
     respond_to do |format|
       if @racer.save
@@ -73,6 +78,16 @@ class RacersController < ApplicationController
       format.html { redirect_to racers_url, notice: 'Racer was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def indef
+    @racers = Racer.all
+  end
+
+  def remove_all
+    Racer.delete_all
+    flash[:notice] = "All racers were successfully removed."
+    redirect_to racers_path
   end
 
   private

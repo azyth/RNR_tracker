@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   resources :racers do
-    collection { post :import}
+    collection { post :import }
+    collection do
+      get 'remove_all'
+    end
   end
+
   resources :race_events
   get 'users/new'
 

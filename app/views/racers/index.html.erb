@@ -1,5 +1,5 @@
 <%= flash[:notice] %>
-<table style="width: 75%">
+<table id='racertable', style="width: 75%">
   <thead>
   <tr>
     <th>Email</th>
@@ -18,12 +18,19 @@
         <td><%= racer.iscurrent %></td>
         <td><%= link_to 'Show', racer %></td>
         <td><%= link_to 'Edit', edit_racer_path(racer) %></td>
-        <td><%= link_to 'Destroy', { action: :destroy, id: racer.id }, method: :delete, data: {confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', { action: :destroy, id: racer.id }, method: :delete, data: {confirm: 'Are you sure?' }, :class => 'destroid' %></td>
       </tr>
   <% end %>
   </tbody>
 </table>
+<br>
+<%= link_to 'Add New Racer', new_racer_path %> |
+<%= link_to 'Clear Database', remove_all_racers_path, :method => :get, confirm: 'This will remove all entries from the database. Are you sure?' %>
+
+
+
 <br><br><hr>
+
 <div>
   <h3>Upload Racer List</h3>
   <%= form_tag import_racers_path, multipart: true do %>
@@ -32,6 +39,4 @@
   <% end %>
 </div>
 
-<br>
-
-<%= link_to 'Add New Racer', new_racer_path %>
+<br><br><hr>

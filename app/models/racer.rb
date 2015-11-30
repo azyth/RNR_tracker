@@ -4,7 +4,7 @@ class Racer < ActiveRecord::Base
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
       racer_hash = row.to_hash
-      racer = Racer.where("email = ? AND bib = ?", racer_hash["email"], racer_hash["bib"])
+      racer = Racer.where("email = ?", racer_hash["email"])
 
       if racer.count == 1
         racer.first.update_attributes(racer_hash)

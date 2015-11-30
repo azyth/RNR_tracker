@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  resources :points do
+    collection do
+      post :new_multiple
+    end
+  end
+  resources :races
+  resources :routes
+  # resources :admin do
+  #   collection do
+  #     get :route_to_points
+  #   end
+  # end
+
+  get 'admin/new_race_route'
+
   resources :race_events
   get 'users/new'
 
@@ -14,6 +29,7 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
   get 'main' => 'welcome#main'
+  get 'index' => 'welcome#index'
   get 'signup' => 'users#new'
 
   get 'coords' => 'welcome#updated_coords'

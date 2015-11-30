@@ -2,6 +2,11 @@
 <html>
 <head>
   <title>RedRunner</title>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -16,13 +21,35 @@
       }
   </style>
 
-  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+  <%= favicon_link_tag 'logo.png' %>
 </head>
 <body>
 
 <%= render 'layouts/header' %>
 <%= yield %>
 <%= render 'layouts/footer' %>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="myModalLabel">Frequently Asked Questions</h2>
+      </div>
+      <div class="modal-body">
+        <h4>Is there a fee for using RedRunner?</h4>
+        <p>No, RedRunner is free to use by all!</p>
+        <h4>Do I need to register to spectate?</h4>
+        <p>No, only the racers are required to register for identity verification.</p>
+        <p>.<br>.<br>.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

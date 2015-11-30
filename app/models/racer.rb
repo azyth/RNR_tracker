@@ -2,8 +2,16 @@ class Racer < ActiveRecord::Base
   require 'csv'
 
   def self.import(file)
+    puts "\n\n\n\n\n##########\n"
+    # puts file.meta
+    puts "##########\n\n\n\n\n"
     CSV.foreach(file.path, headers: true) do |row|
       racer_hash = row.to_hash
+
+      if racer_hash.keys.any? { |key| key.to_s.match("email")}
+        puts "\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n"
+      end
+
       racer = Racer.where("email = ?", racer_hash["email"])
 
       if racer.count == 1

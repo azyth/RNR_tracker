@@ -39,4 +39,23 @@
   <% end %>
 </div>
 
-<br><br><hr>
+<hr>
+
+<button id="helpdivbutton">Is your CSV file not working?</button><br><br>
+<script lang="javascript">
+  function togglediv() {
+    $(".helpdiv").toggle();
+  }
+  document.getElementById("helpdivbutton").onclick = togglediv;
+</script>
+<div class="helpdiv" style="display: none">
+  <p>CSV files should have the following format:</p>
+  <p>email,raceid,bib,iscurrent<br>
+    angel@gmail.com,Triathon,1,0<br>
+    emilio@gmail.com,Triathon,2,0<br>
+    james@gmail.com,Triathon,3,0<br>
+    john@gmail.com,Triathon,4,0<br>
+    jonathan@gmail.com,Triathon,5,0<br>
+    kevin@gmail.com,Triathon,6,0<br>
+    mario@gmail.com,Triathon,7,0</p>
+</div>

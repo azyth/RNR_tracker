@@ -49,6 +49,8 @@ var FileLoader = L.Class.extend({
                 this.fire('data:loading', {filename: file.name, format: ext});
                 var layer = parser.call(this, e.target.result, ext);
                 this.fire('data:loaded', {layer: layer, filename: file.name, format: ext});
+
+                importedFile = true;
             }
             catch (err) {
                 this.fire('data:error', {error: err});

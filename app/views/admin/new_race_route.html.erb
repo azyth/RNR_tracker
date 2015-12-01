@@ -1,41 +1,73 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
 <style>
-    #progress-container-outer {
-        top:100px;
-        position:relative;
-        z-index:100;
-        display:none;
-    }
     #progress-container-inner {
         position:relative;
     }
 
+    .control-group {
+        padding-top: 10px;
+    }
+
 </style>
 
-<!-- Modal -->
-<div class="modal fade" id="raceFromNewRoute" tabindex="-1" role="dialog" aria-labelledby="raceFromNewRouteLabel">
+<!-- Modal Race Creation -->
+<div class="modal fade" id="raceFromRoute" tabindex="-1" role="dialog" aria-labelledby="raceFromRouteLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h2 class="modal-title" id="raceFromNewRouteLabel">Create New Race</h2>
+        <h2 class="modal-title" id="raceFromRouteLabel">Create New Race</h2>
       </div>
       <div class="modal-body">
-        <form role="form">
-          <div class="form-group">
-            <label for="routeid"><span class="glyphicon glyphicon-road"></span> Route ID</label>
-            <input required type="text" class="form-control" id="routeid" placeholder="Enter a unique route identification name">
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs" id="tabContent">
+            <li class="active"><a href="#tab1" data-toggle="tab">New race from new route</a></li>
+            <li><a href="#tab2" data-toggle="tab">New race from existing routes</a></li>
+          </ul>
+          <div class="tab-content">
+
+            <div class="tab-pane active" id="tab1">
+              <div class="control-group">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="routeidNew"><span class="glyphicon glyphicon-road"></span> Route ID</label>
+                    <input required type="text" class="form-control" id="routeidNew" placeholder="Enter a unique route identification name">
+                  </div>
+                  <div class="form-group">
+                    <label for="raceidNew"><span class="glyphicon glyphicon-registration-mark"></span> Race ID</label>
+                    <input required type="text" class="form-control" id="raceidNew" placeholder="Enter a unique race identification name">
+                  </div>
+                <!--<div class="checkbox">-->
+                <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
+                <!--</div>-->
+                  <button type="submit" id="createRaceFromNewRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="tab-pane" id="tab2">
+              <div class="control-group">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="routeidExists"><span class="glyphicon glyphicon-road"></span> Route ID</label>
+                    <%= select_tag('routeidExists', options_from_collection_for_select(@routes, 'routeid', 'routeid'), {include_blank: 'Select a route id', required: 'true', autofocus: 'true', class: 'form-control'}) %>
+                    <!--<input required type="text" class="form-control" id="routeid" placeholder="Enter a unique route identification name">-->
+                  </div>
+                  <div class="form-group">
+                    <label for="raceidExists"><span class="glyphicon glyphicon-registration-mark"></span> Race ID</label>
+                    <input required type="text" class="form-control" id="raceidExists" placeholder="Enter a unique race identification name">
+                  </div>
+                  <!--<div class="checkbox">-->
+                  <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
+                  <!--</div>-->
+                  <button type="submit" id="createRaceFromExistingRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                </form>
+              </div>
+            </div>
+
           </div>
-          <div class="form-group">
-            <label for="raceid"><span class="glyphicon glyphicon-registration-mark"></span> Race ID</label>
-            <input required type="text" class="form-control" id="raceid" placeholder="Enter a unique race identification name">
-          </div>
-          <!--<div class="checkbox">-->
-          <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
-          <!--</div>-->
-          <button type="submit" id="createRace" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
-        </form>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
@@ -46,7 +78,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Progress Bar-->
 <div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -55,18 +87,14 @@
         <h2 class="modal-title" id="progressModalLabel">Progress</h2>
       </div>
       <div class="modal-body">
-
-        <!--<div class="container" id="progress-container-outer">-->
         <div id="progress-container-inner">
           <h5>Percentage of Route Uploaded</h5>
           <div class="progress">
-            <div class="progress-bar" id="progress-bar-ui" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+            <div class="progress-bar" id="progress-bar-ui" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0">
               0%
             </div>
           </div>
         </div>
-        <!--</div>-->
-
       </div>
       <div class="modal-footer">
         <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
@@ -79,85 +107,82 @@
 
 <div id="map"></div>
 
+<div id="races_json" class="hidden"><%= @races.to_json %></div>
+<div id="routes_json" class="hidden"><%= @routes.to_json %></div>
+
+<h5>List of available races</h5>
+<%= select("race", "raceid", Race.all.collect {|race| [ race.raceid, race.raceid ] }, {include_blank: 'None'}) %>
+<h5>List of available routes</h5>
+<%= select("route", "routeid", Route.all.collect {|route| [ route.routeid, route.routeid ] }, {include_blank: 'None'}) %>
+
+
 <script type="text/javascript">
 
-    $("#createRace").click( function (e) {
+    $("#createRaceFromNewRoute").click( function (e) {
+        var raceKey = 'raceid';
+        var routeKey = 'routeid';
 
-        var routeID = $('#routeid').val();
-        var raceID = $('#raceid').val();
+        var raceJsonArray = JSON.parse( document.getElementById('races_json').innerHTML );
+        var routeJsonArray = JSON.parse( document.getElementById('routes_json').innerHTML );
+
+        var raceID = $('#raceidNew').val();
+        var routeID = $('#routeidNew').val();
+
+
+        if (routeID && raceID) {
+
+            e.preventDefault();
+
+            if (importedFile) {
+                if ( keyValInJSONArray(raceKey, raceID, raceJsonArray) ) {
+                    alert("That race id already exists!");
+                }
+                else if ( keyValInJSONArray(routeKey, routeID, routeJsonArray) ) {
+                    alert("That route id already exists!");
+                }
+                else {
+                    $('#raceFromRoute').modal('toggle');
+                    $('#progressModal').modal('toggle');
+                    exportRace(raceID, routeID);
+                    exportRoute(routeID);
+                }
+            }
+            else {
+                alert("Please import a file.");
+            }
+        }
+    });
+
+    $("#createRaceFromExistingRoute").click( function (e) {
+        var raceKey = 'raceid';
+        var raceJsonArray = JSON.parse( document.getElementById('races_json').innerHTML );
+
+        var raceID = $('#raceidExists').val();
+        var routeID = $('#routeidExists').val();
 
         if (routeID && raceID) {
             e.preventDefault();
-            $('#raceFromNewRoute').modal('toggle');
-            $('#progressModal').modal('toggle');
 
-            exportRace(raceID, routeID);
-            exportRoute(routeID);
+            if ( keyValInJSONArray(raceKey, raceID, raceJsonArray) ) {
+                alert("That race id already exists!");
+            }
+            else {
+                $('#raceFromRoute').modal('toggle');
+                $('#progressModal').modal('toggle');
+                exportRace(raceID, routeID);
+            }
         }
-
     });
 
-    var startPoint = [43.1249, 1.254];
     var map = L.map('map', { editable: true }).setView(startPoint, 3);
 
-    //    var tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-    //        maxZoom: 20,
-    //        attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'
-    //    }).addTo(map);
-
-    var tilelayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+    var tileLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
         //bounds: bounds,
         maxZoom: 20,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
     });
-    map.addLayer(tilelayer);
+    map.addLayer(tileLayer);
 
-    var editMode = false;
-
-    var geo = {
-        type: 'FeatureCollection',
-        features: [
-            {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": [
-                        [
-                            -74.3613,
-                            41.669898,
-                            604.254761
-                        ],
-                        [
-                            -74.361234,
-                            41.669996,
-                            604.846802
-                        ],
-                        [
-                            -74.244535,
-                            41.734131,
-                            435.246216
-                        ],
-                        [
-                            -74.244535,
-                            41.734272,
-                            435.884979
-                        ]
-                    ]
-                }
-            }
-        ]
-    }
-
-
-    var className = "BASE_POINTS";
-    var routeOptionsTitle = "ROUTE_OPTIONS";
-    var routeOptions = {
-        title: routeOptionsTitle,
-        style: { color:'red' },
-    };
-
-    //    L.Control.FileLayerLoad.LABEL = '<i class="fa fa-folder-open"></i>';
     L.Control.FileLayerLoad.LABEL = '<i class="glyphicon glyphicon-import"></i>';
 
     var control = L.Control.fileLayerLoad({
@@ -175,13 +200,10 @@
         ]
     }).addTo(map);
 
-
     L.Control.NewEditControl = L.Control.extend({
-
         options: {
             position: 'topleft'
         },
-
         onAdd: function (map) {
             var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
             var link = L.DomUtil.create('a', '', container);
@@ -199,23 +221,20 @@
         }
     });
 
-
     L.Control.NewExportControl = L.Control.extend({
-
         options: {
             position: 'topleft'
         },
-
         onAdd: function (map) {
             var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
                     link = L.DomUtil.create('a', '', container);
 
             link.href = '#';
-            link.title = 'Export route to server';
+            link.title = 'Export race to server';
             link.innerHTML = '<i class="glyphicon glyphicon-export"></i>';
             L.DomEvent.on(link, 'click', L.DomEvent.stop)
                     .on(link, 'click', function () {
-                        $('#raceFromNewRoute').modal('toggle');
+                        $('#raceFromRoute').modal('toggle');
                     });
 
             return container;
@@ -225,55 +244,27 @@
     map.addControl(new L.Control.NewEditControl());
     map.addControl(new L.Control.NewExportControl());
 
-    // getting all the features at once
-    function editRoute() {
-        editMode = true;
-        enableRouteEditing(map, className, routeOptionsTitle);
+    function keyValInJSONArray(key, val, jsonArray) {
+
+        var i;
+        var json;
+        var valInArray;
+        var exists = false;
+        var len = jsonArray.length;
+
+        for (i = 0; i < len; i ++) {
+            json = jsonArray[i];
+            valInArray = json[key];
+
+            if (val == valInArray) {
+                exists = true;
+                break;
+            }
+        }
+
+        return exists;
     }
-
-    function exportRace(raceID, routeID) {
-        var raceJSON = {
-            "race": {
-                "raceid": raceID,
-                "routeid": routeID
-            }
-        };
-        $.ajax({
-            type: 'POST',
-            async: false,
-            url: '/races',
-            data: raceJSON,
-            success: function() {
-                console.log("Success!");
-            }
-        });
-    }
-
-    // getting all the features at once
-    function exportRoute(routeID) {
-        var routeJSON = {
-            "route": {
-                "routeid": routeID
-            }
-        };
-        $.ajax({
-            type: 'POST',
-            async: false,
-            url: '/routes',
-            data: routeJSON,
-            success: function() {
-                console.log("Success!");
-            }
-        });
-
-        disableRouteEditing(routeID, map, className, routeOptions, routeOptionsTitle, editMode);
-    }
-
 </script>
 
-<h5>List of available races</h5>
-<%= select("race", "raceid", Race.all.collect {|race| [ race.raceid, race.raceid ] }, {include_blank: 'None'}) %>
-<h5>List of available routes</h5>
-<%= select("route", "routeid", Route.all.collect {|route| [ route.routeid, route.routeid ] }, {include_blank: 'None'}) %>
 
 <!--<%= debug(params) if Rails.env.development? %>-->

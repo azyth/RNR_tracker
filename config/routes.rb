@@ -4,6 +4,18 @@ Rails.application.routes.draw do
       post :new_multiple
     end
   end
+
+  resources :welcome do
+    collection do
+      get :route_to_points
+    end
+
+    collection do
+      get :updated_coords
+    end
+  end
+
+
   resources :races
   resources :routes
   # resources :admin do
@@ -22,6 +34,8 @@ Rails.application.routes.draw do
 
   get 'race_events/index'
   get 'welcome/updated_coords'
+  get 'welcome/route_to_points'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

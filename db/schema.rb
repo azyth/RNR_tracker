@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151128210917) do
+ActiveRecord::Schema.define(version: 20151201033505) do
 
   create_table "race_events", force: :cascade do |t|
     t.string   "raceid"
@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20151128210917) do
   end
 
   create_table "racers", force: :cascade do |t|
+    t.string   "firstname"
+    t.string   "lastname"
     t.string   "email"
     t.string   "raceid"
     t.integer  "bib"

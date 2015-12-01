@@ -1,1 +1,1 @@
-json.extract! @racer, :id, :email, :raceid, :bib, :iscurrent, :created_at, :updated_at
+json.extract! @racer, :id, :firstname, :lastname, :email, :raceid, :bib, :iscurrent, :created_at, :updated_at

@@ -1,33 +1,41 @@
 <%= form_for(@racer) do |f| %>
-  <% if @racer.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@racer.errors.count, "error") %> prohibited this racer from being saved:</h2>
+    <% if @racer.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@racer.errors.count, "error") %> prohibited this racer from being saved:</h2>
 
-      <ul>
-      <% @racer.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+          <ul>
+            <% @racer.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label :firstname %><br>
+      <%= f.text_field :firstname %>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email %>
-  </div>
-  <div class="field">
-    <%= f.label :raceid %><br>
-    <%= f.text_field :raceid %>
-  </div>
-  <div class="field">
-    <%= f.label :bib %><br>
-    <%= f.number_field :bib %>
-  </div>
-  <div class="field">
-    <%= f.label :iscurrent %><br>
-    <%= f.check_box :iscurrent %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Create/Edit Racer", class: "btn btn-primary" %>
-  </div>
+    <div class="field">
+      <%= f.label :lastname %><br>
+      <%= f.text_field :lastname %>
+    </div>
+    <div class="field">
+      <%= f.label :email %><br>
+      <%= f.text_field :email %>
+    </div>
+    <div class="field">
+      <%= f.label :raceid %><br>
+      <%= f.text_field :raceid %>
+    </div>
+    <div class="field">
+      <%= f.label :bib %><br>
+      <%= f.number_field :bib %>
+    </div>
+    <div class="field">
+      <%= f.label :iscurrent %><br>
+      <%= f.check_box :iscurrent %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Create/Edit Racer", class: "btn btn-primary" %>
+    </div>
 <% end %>

@@ -34,7 +34,9 @@ class RacersController < ApplicationController
   # POST /racers
   # POST /racers.json
   def create
-    newatts = "email,"     + params[:racer][:email]     + "," +
+    newatts = "firstname," + params[:racer][:firstname] + "," +
+              "lastname,"  + params[:racer][:lastname]  + "," +
+              "email,"     + params[:racer][:email]     + "," +
               "raceid,"    + params[:racer][:raceid]    + "," +
               "bib,"       + params[:racer][:bib]       + "," +
               "iscurrent," + params[:racer][:iscurrent]
@@ -56,10 +58,13 @@ class RacersController < ApplicationController
   # PATCH/PUT /racers/1.json
   def update
     respond_to do |format|
-      newatts = "email,"     + params[:racer][:email]     + "," +
+      newatts = "firstname," + params[:racer][:firstname] + "," +
+                "lastname,"  + params[:racer][:lastname]  + "," +
+                "email,"     + params[:racer][:email]     + "," +
                 "raceid,"    + params[:racer][:raceid]    + "," +
                 "bib,"       + params[:racer][:bib]       + "," +
                 "iscurrent," + params[:racer][:iscurrent]
+
       if @racer.update(Hash[*newatts.split(',')])
         format.html { redirect_to @racer, notice: 'Racer was successfully updated.' }
         format.json { render :show, status: :ok, location: @racer }

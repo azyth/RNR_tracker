@@ -2,13 +2,15 @@ class Racer < ActiveRecord::Base
   require 'csv'
 
   def self.import(file)
-    headers = CSV.open(file.path, 'r') { |f| f.first }
-    stremail = headers.to_s.match(/e-?mail/i)[0].strip
-    strraceid = headers.to_s.match(/(race *id)|(event( *id)?)/i)[0].strip
-    strbib = headers.to_s.match(/bib( *id)?/i)[0].strip
-    if stremail && strraceid && strbib
+    headers   = (CSV.open(file.path, 'r') { |f| f.first }).to_s
+    strfname  = headers.match(/first( *name)?/i)[0].strip
+    strlname  = headers.match(/last( *name)?/i)[0].strip
+    stremail  = headers.match(/e-?mail/i)[0].strip
+    strraceid = headers.match(/(race *id)|(event( *id)?)/i)[0].strip
+    strbib    = headers.match(/bib( *id)?/i)[0].strip
+    if strfname && strlname && stremail && strraceid && strbib
       CSV.foreach(file.path, headers: true) do |row|
-        racer_hash = {:email => row[stremail], :raceid => row[strraceid], :bib => row[strbib]}
+        racer_hash = { :firstname => row[strfname], :lastname => row[strlname], :email => row[stremail], :raceid => row[strraceid], :bib => row[strbib]}
         racer = Racer.where("email = ?", racer_hash[stremail])
 
         if racer.count == 1

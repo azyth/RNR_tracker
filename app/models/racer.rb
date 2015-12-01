@@ -2,24 +2,21 @@ class Racer < ActiveRecord::Base
   require 'csv'
 
   def self.import(file)
-    puts "\n\n\n\n\n##########\n"
-    # puts file.meta
-    puts "##########\n\n\n\n\n"
-    CSV.foreach(file.path, headers: true) do |row|
-      racer_hash = row.to_hash
+    headers = CSV.open(file.path, 'r') { |f| f.first }
+    stremail = headers.to_s.match(/e-?mail/i)[0].strip
+    strraceid = headers.to_s.match(/(race *id)|(event( *id)?)/i)[0].strip
+    strbib = headers.to_s.match(/bib( *id)?/i)[0].strip
+    if stremail && strraceid && strbib
+      CSV.foreach(file.path, headers: true) do |row|
+        racer_hash = {:email => row[stremail], :raceid => row[strraceid], :bib => row[strbib]}
+        racer = Racer.where("email = ?", racer_hash[stremail])
 
-      if racer_hash.keys.any? { |key| key.to_s.match("email")}
-        puts "\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n"
-      end
-
-      racer = Racer.where("email = ?", racer_hash["email"])
-
-      if racer.count == 1
-        racer.first.update_attributes(racer_hash)
-      else
-        Racer.create!(racer_hash)
-      end # end if !racer.nil?
-
+        if racer.count == 1
+          racer.first.update_attributes(racer_hash)
+        else
+          Racer.create!(racer_hash)
+        end # end if !racer.nil?
+      end # end if headers match
     end # end CSV.foreach
   end # end self.import(file)
 end

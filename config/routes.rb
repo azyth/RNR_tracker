@@ -44,7 +44,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#main'
+  root 'welcome#index'
   get 'main' => 'welcome#main'
   get 'index' => 'welcome#index'
   get 'signup' => 'users#new'

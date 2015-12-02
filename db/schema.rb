@@ -32,6 +32,17 @@ ActiveRecord::Schema.define(version: 20151201033505) do
     t.datetime "updated_at",                         null: false
   end
 
+  create_table "racers", force: :cascade do |t|
+    t.string   "firstname"
+    t.string   "lastname"
+    t.string   "email"
+    t.string   "raceid"
+    t.integer  "bib"
+    t.boolean  "iscurrent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "races", force: :cascade do |t|
     t.string   "raceid"
     t.string   "routeid"
@@ -41,14 +52,6 @@ ActiveRecord::Schema.define(version: 20151201033505) do
 
   create_table "routes", force: :cascade do |t|
     t.string   "routeid"
-
-  create_table "racers", force: :cascade do |t|
-    t.string   "firstname"
-    t.string   "lastname"
-    t.string   "email"
-    t.string   "raceid"
-    t.integer  "bib"
-    t.boolean  "iscurrent"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

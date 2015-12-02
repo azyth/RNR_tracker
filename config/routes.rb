@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   resources :routes
 
   get 'admin/new_race_route'
+  get 'admin/admin'
 
   resources :race_events
   get 'users/new'
@@ -49,6 +50,9 @@ Rails.application.routes.draw do
   get 'index' => 'welcome#index'
   get 'signup' => 'users#new'
   get 'coords' => 'welcome#updated_coords'
+  get 'admin' => 'admin#admin'
+  get 'adminracers'=> 'welcome#racers'
+  get 'adminraces' =>'admin/rew_race_route'
   resources :users
 
   # Example of regular route:

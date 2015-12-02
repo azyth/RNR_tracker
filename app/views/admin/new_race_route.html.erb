@@ -110,12 +110,6 @@
 <div id="races_json" class="hidden"><%= @races.to_json %></div>
 <div id="routes_json" class="hidden"><%= @routes.to_json %></div>
 
-<h5>List of available races</h5>
-<%= select("race", "raceid", Race.all.collect {|race| [ race.raceid, race.raceid ] }, {include_blank: 'None'}) %>
-<h5>List of available routes</h5>
-<%= select("route", "routeid", Route.all.collect {|route| [ route.routeid, route.routeid ] }, {include_blank: 'None'}) %>
-
-
 <script type="text/javascript">
 
     $("#createRaceFromNewRoute").click( function (e) {

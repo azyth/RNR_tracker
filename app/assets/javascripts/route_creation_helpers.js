@@ -12,7 +12,7 @@ var routeOptions = {
     style: { color:'red' }
 };
 
-var startPoint = [43.1249, 1.254];
+var startPoint = [42.447724, -76.478072];
 
 function featureSkeleton() {
     return {

@@ -1,0 +1,65 @@
+<%= flash[:notice] %>
+<table class='CSSTableGenerator'>
+  <thead>
+  <tr style='background-color:#b31b1b; color:#ffffff'>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Race ID</th>
+    <th>Bib Number</th>
+    <th>Is Current?</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @racers.each do |racer| %>
+      <tr>
+        <td><%= racer.firstname %></td>
+        <td><%= racer.lastname %></td>
+        <td><%= racer.email %></td>
+        <td><%= racer.raceid %></td>
+        <td><%= racer.bib %></td>
+        <td><%= racer.iscurrent %></td>
+        <td><%= link_to 'Show', racer %></td>
+        <td><%= link_to 'Edit', edit_racer_path(racer) %></td>
+        <td><%= link_to 'Destroy', { action: :destroy, id: racer.id }, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+<%= link_to 'Add New Racer', new_racer_path %> |
+<%= link_to 'Clear Database', remove_all_racers_path, :method => :get, data: { confirm: 'This will remove all entries from the database. Are you sure?'} %>
+
+
+
+<br><br><hr>
+
+<div>
+  <h3>Upload Racer List</h3>
+  <%= form_tag import_racers_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import CSV" %>
+  <% end %>
+</div>
+
+<hr>
+
+<button id="helpdivbutton">Is your CSV file not working?</button><br><br>
+<script lang="javascript">
+  function togglediv() {
+    $(".helpdiv").toggle();
+  }
+  document.getElementById("helpdivbutton").onclick = togglediv;
+</script>
+<div class="helpdiv" style="display: none">
+  <p>CSV files should have the following format:</p>
+  <p>email,raceid,bib,iscurrent<br>
+    angel@gmail.com,Triathon,1,0<br>
+    emilio@gmail.com,Triathon,2,0<br>
+    james@gmail.com,Triathon,3,0<br>
+    john@gmail.com,Triathon,4,0<br>
+    jonathan@gmail.com,Triathon,5,0<br>
+    kevin@gmail.com,Triathon,6,0<br>
+    mario@gmail.com,Triathon,7,0</p>
+</div>

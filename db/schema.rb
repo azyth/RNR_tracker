@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130180211) do
+ActiveRecord::Schema.define(version: 20151201033505) do
 
   create_table "points", force: :cascade do |t|
     t.string   "routeid"
@@ -30,6 +30,17 @@ ActiveRecord::Schema.define(version: 20151130180211) do
     t.decimal  "longitude",  precision: 9, scale: 6
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
+  end
+
+  create_table "racers", force: :cascade do |t|
+    t.string   "firstname"
+    t.string   "lastname"
+    t.string   "email"
+    t.string   "raceid"
+    t.integer  "bib"
+    t.boolean  "iscurrent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "races", force: :cascade do |t|

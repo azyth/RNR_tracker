@@ -1,3 +1,10 @@
+<style>
+  form {
+    width: 75%;
+    margin: 0 auto;
+}
+</style>
+
 <%= form_for(@racer) do |f| %>
     <% if @racer.errors.any? %>
         <div id="error_explanation">

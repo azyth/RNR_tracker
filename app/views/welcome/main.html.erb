@@ -6,16 +6,14 @@
 <style>
     .filter-ui {
         background:#fff;
-        position:absolute;
+        position:fixed;
         top:7em;
-        right:1em;
-        z-index:100;
+        right:1em;  
+        z-index:10000;
         padding:1em;
         border-radius:0.5em;
-
-        /*width: 500px;*/
+        width: 310px;
     }
-
     #checkbox-filter {
         padding-top: 0.5em;
         padding-bottom: 0.25em;
@@ -34,13 +32,21 @@
         padding-right: 1em;
         width:2em;
     }
+
 </style>
 
-
-<nav id='filter-racers' class='filter-ui'>
+<button id="map_settings"type="button" class="btn btn-danger" >
+  Map Settings <span id="button_glyphicon" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+</button>
+  <nav id='filter-racers' class='filter-ui'>
 
   <form role="form">
     <div class="form-group">
+      <div id="race_selecting">
+        <%= select_tag('raceToUpload', options_from_collection_for_select(@races, 'routeid', 'raceid'),
+                       {include_blank: 'Select a Race', required: 'true', autofocus: 'true', class: 'form-control'}) %>
+        <button id="race_select_button"class="btn btn-primary" onclick="myFunction()">Show</button>
+      </div>
       <div id="search-bar" class="input-group">
         <input type="text" id="bibNo" class="form-control" placeholder="Search Athlete by Bib#" required>
             <span class="input-group-btn">
@@ -69,6 +75,18 @@
 
 
 <script language="javascript" type="text/javascript">
+
+    $("#map_settings").click(function(){
+        $("#filter-racers").toggle();
+        if ($("#filter-racers").css('display') == 'none') {
+            $("#button_glyphicon").removeClass("glyphicon-chevron-down");
+            $("#button_glyphicon").addClass("glyphicon-chevron-up");
+        }
+        else{
+            $("#button_glyphicon").removeClass("glyphicon-chevron-up");
+            $("#button_glyphicon").addClass("glyphicon-chevron-down");
+        }
+    });
 
     $("#addRacerToMap").click( function (e) {
         displayBib(e);
@@ -269,9 +287,5 @@
     }
 </script>
 
-<%= select_tag('raceToUpload', options_from_collection_for_select(@races, 'routeid', 'raceid'), {include_blank: 'Select a race id', required: 'true', autofocus: 'true', class: 'form-control'}) %>
-<div>
-  <button onclick="myFunction()">Click me</button>
-</div>
 
 <!--<%= debug(params) if Rails.env.development? %>-->

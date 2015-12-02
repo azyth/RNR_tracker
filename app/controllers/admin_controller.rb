@@ -5,4 +5,7 @@ class AdminController < ApplicationController
     @routes = Route.all
   end
 
+  def admin
+
+  end
 end

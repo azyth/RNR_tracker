@@ -53,6 +53,11 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#admin'
   get 'adminracers'=> 'welcome#racers'
   get 'adminraces' =>'admin/rew_race_route'
+
+  get 'login' => 'sessions#new'
+  post 'login' => 'sessions#create'
+  delete 'logout' => 'sessions#destroy'
+
   resources :users
 
   # Example of regular route:

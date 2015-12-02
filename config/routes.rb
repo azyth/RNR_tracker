@@ -1,4 +1,32 @@
 Rails.application.routes.draw do
+  resources :racers do
+    collection { post :import }
+    collection do
+      get 'remove_all'
+    end
+  end
+
+  resources :points do
+    collection do
+      post :new_multiple
+    end
+  end
+
+  resources :welcome do
+    collection do
+      get :route_to_points
+    end
+
+    collection do
+      get :updated_coords
+    end
+  end
+
+  resources :races
+  resources :routes
+
+  get 'admin/new_race_route'
+
   resources :race_events
   get 'users/new'
 
@@ -7,6 +35,10 @@ Rails.application.routes.draw do
 
   get 'race_events/index'
   get 'welcome/updated_coords'
+  get 'welcome/route_to_points'
+
+  get 'racers/new'
+  get 'racers/upload_racers'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -16,7 +48,6 @@ Rails.application.routes.draw do
   get 'main' => 'welcome#main'
   get 'index' => 'welcome#index'
   get 'signup' => 'users#new'
-
   get 'coords' => 'welcome#updated_coords'
   resources :users
 

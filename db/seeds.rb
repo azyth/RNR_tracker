@@ -24,3 +24,7 @@ RaceEvent.delete_all
   RaceEvent.create(raceid: "Race1", bib: count + 1, time: t2, latitude: rand_latitude, longitude: rand_longitude)
 end
 
+Point.delete_all
+Race.delete_all
+Route.delete_all
+

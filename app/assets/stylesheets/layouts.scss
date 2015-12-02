@@ -74,10 +74,36 @@ a.anchor {
   background-repeat: no-repeat;
   background-position: center;
   color:black;
+  height:400px;
 }
 .text{
   font-size:17px;
 }
 .jumbotron{
   background-color:black;
+}
+#race_selecting{
+ width:260px;
+}
+#raceToUpload{
+  width:210px;
+  float:left;
+  border-bottom-right-radius:0px;
+  border-top-right-radius:0px;
+}
+#race_select_button{
+  float:right;
+  width:50px;
+  border-bottom-left-radius:0px;
+  border-top-left-radius:0px;
+  padding-left:6px;
+}
+#map_settings{
+  position:fixed;
+  right:13px;
+  top:65px;
+  z-index:90000;
+  width:310px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
 }

@@ -1,0 +1,77 @@
+<%= flash[:notice] %>
+<table class='CSSTableGenerator'>
+  <thead>
+  <tr style='background-color:#b31b1b; color:#ffffff'>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Race ID</th>
+    <th>Bib Number</th>
+    <th>Is Current?</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @racers.each do |racer| %>
+      <tr>
+        <td><%= racer.firstname %></td>
+        <td><%= racer.lastname %></td>
+        <td><%= racer.email %></td>
+        <td><%= racer.raceid %></td>
+        <td><%= racer.bib %></td>
+        <td><%= racer.iscurrent %></td>
+        <td><%= link_to 'Show', racer %></td>
+        <td><%= link_to 'Edit', edit_racer_path(racer) %></td>
+        <td><%= link_to 'Destroy', { action: :destroy, id: racer.id }, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<br>
+<%= link_to 'Add New Racer', new_racer_path %> |
+<%= link_to 'Clear Database', remove_all_racers_path, :method => :get, data: { confirm: 'This will remove all entries from the database. Are you sure?'} %>
+
+
+
+<br><br><hr>
+
+<div>
+  <h3>Upload Racer List</h3>
+  <%= form_tag import_racers_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import CSV" %>
+  <% end %>
+</div>
+
+<hr>
+
+<button id="helpdivbutton">Is your CSV file not working?</button><br><br>
+<script lang="javascript">
+  function togglediv() {
+    $(".helpdiv").toggle();
+  }
+  document.getElementById("helpdivbutton").onclick = togglediv;
+</script>
+<div class="helpdiv" style="display: none">
+  <p>CSV files should contain the following columns (extra columns are fine but will not be used):</p>
+  <ul>
+    <li>First Name</li>
+    <li>Last Name</li>
+    <li>Email Address</li>
+    <li>Race ID</li>
+    <li>Bib Number</li>
+    <li>Is Current</li>
+  </ul>
+  <br>
+  <p>Any variation of these column names will work (letter case is not important).</p>
+  <p>For instance, 'Bib', 'bibNumber', 'Bib Number', 'BibID', and 'bib id' would all work.</p>
+  <p>The regular expressions used to match the columns mentioned above are as follows:</p>
+  <ul>
+    <li>/\bfirst(\s*name)?/i</li>
+    <li>/\blast(\s*name)?/i</li>
+    <li>/\be-?mail(\s*address)?/i</li>
+    <li>/\b(race(\s*id)?)|(event(\s*id)?)/i</li>
+    <li>/\bbib((\s*id)|(\s*number))?/i</li>
+    <li>/\bis(\s*current)?/i</li>
+  </ul>
+</div>

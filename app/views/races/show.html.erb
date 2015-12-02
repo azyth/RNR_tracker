@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Raceid:</strong>
+  <%= @race.raceid %>
+</p>
+
+<p>
+  <strong>Routeid:</strong>
+  <%= @race.routeid %>
+</p>
+
+<%= link_to 'Edit', edit_race_path(@race) %> |
+<%= link_to 'Back', races_path %>

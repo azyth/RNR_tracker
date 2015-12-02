@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  routeid: MyString
+  pointid: MyString
+  lng: 9.99
+  lat: 9.99
+
+two:
+  routeid: MyString
+  pointid: MyString
+  lng: 9.99
+  lat: 9.99

@@ -1,0 +1,264 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+<style>
+    #progress-container-inner {
+        position:relative;
+    }
+
+    .control-group {
+        padding-top: 10px;
+    }
+
+</style>
+
+<!-- Modal Race Creation -->
+<div class="modal fade" id="raceFromRoute" tabindex="-1" role="dialog" aria-labelledby="raceFromRouteLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="raceFromRouteLabel">Create New Race</h2>
+      </div>
+      <div class="modal-body">
+        <div class="tabbable"> <!-- Only required for left/right tabs -->
+          <ul class="nav nav-tabs" id="tabContent">
+            <li class="active"><a href="#tab1" data-toggle="tab">New race from new route</a></li>
+            <li><a href="#tab2" data-toggle="tab">New race from existing routes</a></li>
+          </ul>
+          <div class="tab-content">
+
+            <div class="tab-pane active" id="tab1">
+              <div class="control-group">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="routeidNew"><span class="glyphicon glyphicon-road"></span> Route ID</label>
+                    <input required type="text" class="form-control" id="routeidNew" placeholder="Enter a unique route identification name">
+                  </div>
+                  <div class="form-group">
+                    <label for="raceidNew"><span class="glyphicon glyphicon-registration-mark"></span> Race ID</label>
+                    <input required type="text" class="form-control" id="raceidNew" placeholder="Enter a unique race identification name">
+                  </div>
+                <!--<div class="checkbox">-->
+                <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
+                <!--</div>-->
+                  <button type="submit" id="createRaceFromNewRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="tab-pane" id="tab2">
+              <div class="control-group">
+                <form role="form">
+                  <div class="form-group">
+                    <label for="routeidExists"><span class="glyphicon glyphicon-road"></span> Route ID</label>
+                    <%= select_tag('routeidExists', options_from_collection_for_select(@routes, 'routeid', 'routeid'), {include_blank: 'Select a route id', required: 'true', autofocus: 'true', class: 'form-control'}) %>
+                    <!--<input required type="text" class="form-control" id="routeid" placeholder="Enter a unique route identification name">-->
+                  </div>
+                  <div class="form-group">
+                    <label for="raceidExists"><span class="glyphicon glyphicon-registration-mark"></span> Race ID</label>
+                    <input required type="text" class="form-control" id="raceidExists" placeholder="Enter a unique race identification name">
+                  </div>
+                  <!--<div class="checkbox">-->
+                  <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
+                  <!--</div>-->
+                  <button type="submit" id="createRaceFromExistingRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Progress Bar-->
+<div class="modal fade" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="progressModalLabel">Progress</h2>
+      </div>
+      <div class="modal-body">
+        <div id="progress-container-inner">
+          <h5>Percentage of Route Uploaded</h5>
+          <div class="progress">
+            <div class="progress-bar" id="progress-bar-ui" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0">
+              0%
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="map"></div>
+
+<div id="races_json" class="hidden"><%= @races.to_json %></div>
+<div id="routes_json" class="hidden"><%= @routes.to_json %></div>
+
+<script type="text/javascript">
+
+    $("#createRaceFromNewRoute").click( function (e) {
+        var raceKey = 'raceid';
+        var routeKey = 'routeid';
+
+        var raceJsonArray = JSON.parse( document.getElementById('races_json').innerHTML );
+        var routeJsonArray = JSON.parse( document.getElementById('routes_json').innerHTML );
+
+        var raceID = $('#raceidNew').val();
+        var routeID = $('#routeidNew').val();
+
+
+        if (routeID && raceID) {
+
+            e.preventDefault();
+
+            if (importedFile) {
+                if ( keyValInJSONArray(raceKey, raceID, raceJsonArray) ) {
+                    alert("That race id already exists!");
+                }
+                else if ( keyValInJSONArray(routeKey, routeID, routeJsonArray) ) {
+                    alert("That route id already exists!");
+                }
+                else {
+                    $('#raceFromRoute').modal('toggle');
+                    $('#progressModal').modal('toggle');
+                    exportRace(raceID, routeID);
+                    exportRoute(routeID);
+                }
+            }
+            else {
+                alert("Please import a file.");
+            }
+        }
+    });
+
+    $("#createRaceFromExistingRoute").click( function (e) {
+        var raceKey = 'raceid';
+        var raceJsonArray = JSON.parse( document.getElementById('races_json').innerHTML );
+
+        var raceID = $('#raceidExists').val();
+        var routeID = $('#routeidExists').val();
+
+        if (routeID && raceID) {
+            e.preventDefault();
+
+            if ( keyValInJSONArray(raceKey, raceID, raceJsonArray) ) {
+                alert("That race id already exists!");
+            }
+            else {
+                $('#raceFromRoute').modal('toggle');
+                $('#progressModal').modal('toggle');
+                exportRace(raceID, routeID);
+            }
+        }
+    });
+
+    var map = L.map('map', { editable: true }).setView(startPoint, 3);
+
+    var tileLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+        //bounds: bounds,
+        maxZoom: 20,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+    });
+    map.addLayer(tileLayer);
+
+    L.Control.FileLayerLoad.LABEL = '<i class="glyphicon glyphicon-import"></i>';
+
+    var control = L.Control.fileLayerLoad({
+        // See http://leafletjs.com/reference.html#geojson-options
+        layerOptions: routeOptions,
+        // Add to map after loading (default: true) ?
+        addToMap: true,
+        // File size limit in kb (default: 1024) ?
+        fileSizeLimit: 1024,
+        // Restrict accepted file formats (default: .geojson, .kml, and .gpx) ?
+        formats: [
+            '.geojson',
+            '.kml',
+            '.gpx'
+        ]
+    }).addTo(map);
+
+    L.Control.NewEditControl = L.Control.extend({
+        options: {
+            position: 'topleft'
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar');
+            var link = L.DomUtil.create('a', '', container);
+
+            link.href = '#';
+            link.title = 'Edit route';
+            link.innerHTML = '<i class="glyphicon glyphicon glyphicon-pencil"></i>';
+
+            L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                    .on(link, 'click', function () {
+                        editRoute();
+                    });
+
+            return container;
+        }
+    });
+
+    L.Control.NewExportControl = L.Control.extend({
+        options: {
+            position: 'topleft'
+        },
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-control leaflet-bar'),
+                    link = L.DomUtil.create('a', '', container);
+
+            link.href = '#';
+            link.title = 'Export race to server';
+            link.innerHTML = '<i class="glyphicon glyphicon-export"></i>';
+            L.DomEvent.on(link, 'click', L.DomEvent.stop)
+                    .on(link, 'click', function () {
+                        $('#raceFromRoute').modal('toggle');
+                    });
+
+            return container;
+        }
+    });
+
+    map.addControl(new L.Control.NewEditControl());
+    map.addControl(new L.Control.NewExportControl());
+
+    function keyValInJSONArray(key, val, jsonArray) {
+
+        var i;
+        var json;
+        var valInArray;
+        var exists = false;
+        var len = jsonArray.length;
+
+        for (i = 0; i < len; i ++) {
+            json = jsonArray[i];
+            valInArray = json[key];
+
+            if (val == valInArray) {
+                exists = true;
+                break;
+            }
+        }
+
+        return exists;
+    }
+</script>
+
+
+<!--<%= debug(params) if Rails.env.development? %>-->

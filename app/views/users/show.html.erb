@@ -1,11 +1,9 @@
 <%= @user.name %>, <%= @user.email %>
 <div class="row">
-  <aside class="col-md-4">
     <section class="user_info">
-      <p>
-        <%= gravatar_for @user %>
-        <%= @user.name %>
-      </p>
+      <h3 style="text-align:center;">
+        You have successfully registered as <%= @user.name %>.
+        <br><br>To begin tracking, please sign in to your mobile app using your new login information.
+      </h3>
     </section>
-  </aside>
 </div>

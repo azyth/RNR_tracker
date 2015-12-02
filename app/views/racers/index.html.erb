@@ -53,13 +53,25 @@
   document.getElementById("helpdivbutton").onclick = togglediv;
 </script>
 <div class="helpdiv" style="display: none">
-  <p>CSV files should have the following format:</p>
-  <p>email,raceid,bib,iscurrent<br>
-    angel@gmail.com,Triathon,1,0<br>
-    emilio@gmail.com,Triathon,2,0<br>
-    james@gmail.com,Triathon,3,0<br>
-    john@gmail.com,Triathon,4,0<br>
-    jonathan@gmail.com,Triathon,5,0<br>
-    kevin@gmail.com,Triathon,6,0<br>
-    mario@gmail.com,Triathon,7,0</p>
+  <p>CSV files should contain the following columns (extra columns are fine but will not be used):</p>
+  <ul>
+    <li>First Name</li>
+    <li>Last Name</li>
+    <li>Email Address</li>
+    <li>Race ID</li>
+    <li>Bib Number</li>
+    <li>Is Current</li>
+  </ul>
+  <br>
+  <p>Any variation of these column names will work (letter case is not important).</p>
+  <p>For instance, 'Bib', 'bibNumber', 'Bib Number', 'BibID', and 'bib id' would all work.</p>
+  <p>The regular expressions used to match the columns mentioned above are as follows:</p>
+  <ul>
+    <li>/\bfirst(\s*name)?/i</li>
+    <li>/\blast(\s*name)?/i</li>
+    <li>/\be-?mail(\s*address)?/i</li>
+    <li>/\b(race(\s*id)?)|(event(\s*id)?)/i</li>
+    <li>/\bbib((\s*id)|(\s*number))?/i</li>
+    <li>/\bis(\s*current)?/i</li>
+  </ul>
 </div>

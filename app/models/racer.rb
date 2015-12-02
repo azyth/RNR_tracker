@@ -5,9 +5,9 @@ class Racer < ActiveRecord::Base
     headers   = (CSV.open(file.path, 'r') { |f| f.first }).to_s
     strfname  = headers.match(/\bfirst(\s*name)?/i)[0].strip
     strlname  = headers.match(/\blast(\s*name)?/i)[0].strip
-    stremail  = headers.match(/\be-?mail/i)[0].strip
+    stremail  = headers.match(/\be-?mail(\s*address)?/i)[0].strip
     strraceid = headers.match(/\b(race(\s*id)?)|(event(\s*id)?)/i)[0].strip
-    strbib    = headers.match(/\bbib(\s*id)?/i)[0].strip
+    strbib    = headers.match(/\bbib((\s*id)|(\s*number))?/i)[0].strip
     striscrnt = headers.match(/\bis(\s*current)?/i)[0].strip
     if strfname && strlname && stremail && strraceid && strbib && striscrnt
       CSV.foreach(file.path, headers: true) do |row|

@@ -33,7 +33,6 @@ function featureSkeleton() {
 
 function getNonEditableRoutePoints(map, routeOptionsTitle, remove) {
     var points = [];
-    alert('maps');
     $.each(map._layers, function(ml) {
         if (map._layers[ml].feature) {
             points.push(this.toGeoJSON());

@@ -83,7 +83,7 @@ function getEditableRoutePoints(map, className) {
 function enableRouteEditing(map, className, routeOptionsTitle) {
     var removeOldRoute = true;
     var routePoints = getNonEditableRoutePoints(map, routeOptionsTitle, removeOldRoute);
-    alert('before edit');   // will need to check what type of route it is, i.e Linestring, Multilinestring...
+    //alert('before edit');   // will need to check what type of route it is, i.e Linestring, Multilinestring...
 
     var coords2D = [];
     var coords3D = routePoints[0].geometry.coordinates;
@@ -100,8 +100,8 @@ function enableRouteEditing(map, className, routeOptionsTitle) {
         className: className
     }).addTo(map);
     line.enableEdit();
-    line.on('dblclick', L.DomEvent.stop).on('dblclick', line.toggleEdit);
-    alert('after edit');
+    //line.on('dblclick', L.DomEvent.stop).on('dblclick', line.toggleEdit);
+    //alert('after edit');
 }
 
 function disableRouteEditing(routeID, map, className, routeOptions, routeOptionsTitle, editMode) {
@@ -170,7 +170,9 @@ function uploadBatch(i, numCoords, coords3D, ROUTE_ID) {
             //batchCount = 0;
 
             update_progress_bar(i, numCoords);
-            alert("after save");
+
+            window.location.href = "http://0.0.0.0:3000/admin/new_race_route.html";
+            alert("Successfully uploaded new race!");
         }  
         // ***************************** END ***************************** //
     }
@@ -196,7 +198,7 @@ function saveRouteFromMap(map, className, routeOptions, ROUTE_ID) {
 
     var i = 0;
     uploadBatch(i, numCoords, coords3D, ROUTE_ID);
-    drawNonEditableRoute(map, routeOptions, coords3D);
+    //drawNonEditableRoute(map, routeOptions, coords3D);
 }
 
 function update_progress_bar(i, numCoords) {
@@ -221,7 +223,7 @@ function editRoute() {
 }
 
 // exporting the race and route associated with it
-function exportRace(raceID, routeID) {
+function exportRace(raceID, routeID, exportingRoute) {
     var raceJSON = {
         "race": {
             "raceid": raceID,
@@ -234,7 +236,11 @@ function exportRace(raceID, routeID) {
         url: '/races',
         data: raceJSON,
         success: function() {
-            console.log("Success!");
+            if (!exportingRoute) {
+                update_progress_bar(1, 2);
+                window.location.href = "http://0.0.0.0:3000/admin/new_race_route.html";
+                alert("Successfully uploaded new race!");
+            }
         }
     });
 }

@@ -68,7 +68,7 @@
                 <!--<div class="checkbox">-->
                 <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
                 <!--</div>-->
-                  <button type="submit" id="createRaceFromNewRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                  <button type="submit" id="createRaceFromNewRoute" class="btn btn-default btn-primary btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
                 </form>
               </div>
             </div>
@@ -88,7 +88,7 @@
                   <!--<div class="checkbox">-->
                   <!--<label><input type="checkbox" value="" checked>Remember me</label>-->
                   <!--</div>-->
-                  <button type="submit" id="createRaceFromExistingRoute" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
+                  <button type="submit" id="createRaceFromExistingRoute" class="btn btn-default btn-primary btn-block"><span class="glyphicon glyphicon-ok"></span> Create Race</button>
                 </form>
               </div>
             </div>
@@ -97,7 +97,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
+        <!--<button type="submit" class="btn btn-danger btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>-->
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -164,8 +164,8 @@
                 else {
                     $('#raceFromRoute').modal('toggle');
                     $('#progressModal').modal('toggle');
-                    exportRace(raceID, routeID);
                     exportRoute(routeID);
+                    exportRace(raceID, routeID, true);
                 }
             }
             else {
@@ -190,19 +190,25 @@
             else {
                 $('#raceFromRoute').modal('toggle');
                 $('#progressModal').modal('toggle');
-                exportRace(raceID, routeID);
+                exportRace(raceID, routeID, false);
             }
         }
     });
 
-    var map = L.map('map', { editable: true }).setView(startPoint, 3);
+    var map = L.map('map', { editable: true }).setView(startPoint, 10);
 
-    var tileLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
-        //bounds: bounds,
+//    var tileLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
+//        //bounds: bounds,
+//        maxZoom: 20,
+//        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+//    });
+
+    var layer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         maxZoom: 20,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    });
-    map.addLayer(tileLayer);
+        attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'
+    }).addTo(map);
+
+    map.addLayer(layer);
 
     L.Control.FileLayerLoad.LABEL = '<i class="glyphicon glyphicon-import"></i>';
 

@@ -1,8 +1,3 @@
-
-<% flash.each do |message_type, message| %>
-    <div class="alert alert-<%= message_type %>"><%= message %></div>
-<% end %>
-
 <style>
     .filter-ui {
         background:#fff;
@@ -48,7 +43,7 @@
         <button id="race_select_button"class="btn btn-primary" onclick="myFunction()">Show</button>
       </div>
       <div id="search-bar" class="input-group">
-        <input type="text" id="bibNo" class="form-control" placeholder="Search Athlete by Bib#" required>
+        <input type="text" id="bibNo" class="form-control" placeholder="Search Athlete by Name or Bib#">
             <span class="input-group-btn">
               <button id="addRacerToMap" class="btn btn-primary" type="submit">Add</button>
             </span>
@@ -88,10 +83,20 @@
         }
     });
 
-    $("#add_racer_form").submit( function (e) {
-        var idString = ( document.getElementById("bibNo").value );
-        displayRacer("#add_racer_form", idString, lookupRacerBib);
-        return false;
+    $("#addRacerToMap").submit( function (e) {
+        var storedRacesJson = JSON.parse(localStorage.getItem(selectedRaceKey));
+        var raceid = storedRacesJson["raceid"];;
+        if (raceid.length != 0) {
+
+            var idString = ( document.getElementById("bibNo").value );
+            displayRacer("#add_racer_form", idString, lookupRacerBib);
+            return false;
+        }
+
+        else {
+//            alert("Please select a race.");
+//            return false;
+        }
     });
 
     $("#remove").click( function (e) {

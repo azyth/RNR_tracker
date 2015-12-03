@@ -40,6 +40,7 @@ Rails.application.routes.draw do
 
   get 'racers/new'
   get 'racers/upload_racers'
+  get 'admin/adminlogin'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -51,8 +52,7 @@ Rails.application.routes.draw do
   get 'signup' => 'users#new'
   get 'coords' => 'welcome#updated_coords'
   get 'admin' => 'admin#admin'
-  get 'adminracers'=> 'welcome#racers'
-  get 'adminraces' =>'admin/rew_race_route'
+  get 'adminlogin'=> 'admin#adminlogin'
 
   get 'login' => 'sessions#new'
   post 'login' => 'sessions#create'

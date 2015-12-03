@@ -1,0 +1,24 @@
+<h1 style="text-align:center;">Admin Log in</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+
+    <p><span style="font-weight:bold;">Username</span> <input type="text" class="form-control" id="adminusername" value=""><br>
+    <span style="font-weight:bold;">Password</span> <input type="password" class="form-control" id="adminpassword" value=""><br>
+    </p>
+    <button id="adminsubmit" class="btn btn-primary" >Log in</button>
+  </div>
+</div>
+
+<script>
+  $('#adminsubmit').click(function(){
+      var username = $('#adminusername').val();
+      var password = $('#adminpassword').val();
+      if ((username == 'admin') && (password == '123')){
+          window.location.href = 'admin';
+      }
+      else{
+          alert("Error: Invalid username or password");
+      }
+  });
+</script>

@@ -63,12 +63,18 @@
   </div>
 </nav>
 
-
 <div id="map"></div>
 
-
-
 <script language="javascript" type="text/javascript">
+
+    function myFunction () {
+        var raceToUpload = document.getElementById('raceToUpload').value;
+        displayRace(raceToUpload);
+    }
+
+    function reattachEvents(e){
+        $(e).unbind('submit').submit();
+    }
 
     $("#map_settings").click(function(){
         $("#filter-racers").toggle();
@@ -82,9 +88,10 @@
         }
     });
 
-    //$("#addRacerToMap").click( function (e) {
     $("#add_racer_form").submit( function (e) {
-        displayBib(e);
+        var idString = ( document.getElementById("bibNo").value );
+        displayRacer("#add_racer_form", idString, lookupRacerBib);
+        return false;
     });
 
     $("#remove").click( function (e) {
@@ -97,127 +104,21 @@
     var bounds = [southWest, northEast];
     var map = L.map('map', { editable: false }).setView(startPoint, 10);
 
-        // Uncomment to create bounded rectangle on the size of the world
-//        var getBounds = function(){
-//            return new L.LatLngBounds(southWest, northEast);
-//        };
-//
-//        var onViewReset = function(e){
-//            map.setMaxBounds(map.getBounds());
-//            map.off('viewreset', onViewReset);
-//        };
-//
-//        L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
-//        map.on('viewreset', onViewReset);
-//        map.fitBounds(getBounds(), {reset: true});
-
-    var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png', {
-        bounds: bounds,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
-    });
+    var layer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'
+    }).addTo(map);
 
     map.addLayer(layer);
 
-    var key = "bibs"; // defined in _header.html.erb
-    var selected_racers = JSON.parse(localStorage.getItem(key)); // view _header to see how bibs are stored
-    var racer_markers = []; // array of markers that are displayed on map
+    initializeLocalStorage();
+    initializeMarkers();
+    createFilterUI();
 
-    // initialize markers for selected racers so locations can be updated
-    var n;
-    for (n = 0; n < selected_racers.length; n++) {
-        var marker = L.marker([0, 0], {opacity: 0});
-        marker.addTo(map);
-        racer_markers.push(marker);
-    }
-
-    function updateCoords() {
-        // ajax call to get racers info from another page
-        $.ajax({
-            url: "welcome/updated_coords",
-            success: plotCoords // callback handler
-        });
-        setTimeout(updateCoords, 10000); // update every 10 seconds
-    }
-
-    /* ***************** Code for filter UI that allows users to remove and deselect racers ***************** */
-
-    // find reference to filter UI and set its title
-    var filter = document.getElementById('checkbox-filter');
-    var checkboxes = [];
-    // create a filter interface.
-    for (var i = 0; i < selected_racers.length; i++) {
-        // item will contain input checkbox and label
-        var item = document.createElement('div');
-
-        filter.appendChild(item);
-        item.id = selected_racers[i];
-
-        // create checkbox and div to contain it
-        var checkbox_div = document.createElement('div');
-        checkbox_div.className = "container-checkbox-inline";
-        item.appendChild(checkbox_div);
-        var checkbox = document.createElement('input');
-        checkbox_div.appendChild(checkbox);
-        checkbox.type = 'checkbox';
-        checkbox.id = selected_racers[i]; // bib number is id for box
-        checkbox.checked = false;
-        checkboxes.push(checkbox);
-
-        // create a label to the right of the checkbox with racer bib number
-        var label = document.createElement('div');
-        label.className = "container-label-inline";
-        item.appendChild(label);
-        label.innerHTML = "BibNo: " + selected_racers[i];
-        label.setAttribute('for', selected_racers[i]);
-    }
-
+    var storedRacesInfo = JSON.parse(localStorage.getItem(selectedRaceKey));
+    var routeInfo = storedRacesInfo["routeid"];
+    document.getElementById('raceToUpload').value = routeInfo;
 
     window.onload = updateCoords;
 </script>
 
-
-<script type="text/javascript" charset="utf-8">
-    var routeOptionsTitle = "ROUTE_OPTIONS";
-
-    var routeOptions = {
-        title: routeOptionsTitle,
-        style: { color:'red' }
-    };
-
-    function myFunction () {
-        var raceToUpload = document.getElementById('raceToUpload').value;
-        var routeJSON = {
-            "route": {
-                "routeid": raceToUpload
-            }
-        };
-
-        $.ajax({
-            type: 'GET',
-            async: false,
-            url: '/welcome/route_to_points.json',
-            data: routeJSON,
-            success: function(data) {
-                var coords3D = [];
-                var i;
-                for (i = 0; i < data.length; i ++) {
-                    var lng = data[i].lng;
-                    var lat = data[i].lat;
-                    var alt = data[i].alt;
-                    var coord = [lng, lat, alt];
-                    coords3D.push(coord);
-                }
-
-                drawNonEditableRoute(map, routeOptions, coords3D);
-                var midLat = data[ data.length/2 ].lat;
-                var midLng = data[ data.length/2 ].lng;
-                var routeViewPoint = [midLat, midLng];
-                map.setView(routeViewPoint, 13);
-            }
-        });
-
-    }
-</script>
-
-
-<!--<%= debug(params) if Rails.env.development? %>-->

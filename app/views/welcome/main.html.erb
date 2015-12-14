@@ -83,11 +83,11 @@
         }
     });
 
-    $("#addRacerToMap").submit( function (e) {
-        var storedRacesJson = JSON.parse(localStorage.getItem(selectedRaceKey));
-        var raceid = storedRacesJson["raceid"];;
-        if (raceid.length != 0) {
-
+    $("#addRacerToMap").click( function (e) {
+	var storedRacesJson = JSON.parse(localStorage.getItem(selectedRaceKey));
+        var raceid = storedRacesJson["raceid"];
+ 
+	if (raceid.length != 0) {
             var idString = ( document.getElementById("bibNo").value );
             displayRacer("#add_racer_form", idString, lookupRacerBib);
             return false;

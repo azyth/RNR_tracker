@@ -89,8 +89,8 @@ function enableRouteEditing(map, className, routeOptionsTitle) {
     var coords3D = routePoints[0].geometry.coordinates;
     var numCoords = coords3D.length;
     var i;
-    var lim = Math.min(100, numCoords);
-    for (i = 0; i < lim; i++) {
+    //var lim = Math.min(100, numCoords);
+    for (i = 0; i < numCoords; i++) {
         var x = (coords3D[i])[1];
         var y = (coords3D[i])[0];
         var coord = [x, y];
@@ -171,7 +171,7 @@ function uploadBatch(i, numCoords, coords3D, ROUTE_ID) {
 
             update_progress_bar(i, numCoords);
 
-            window.location.href = "http://0.0.0.0:3000/admin/new_race_route.html";
+            window.location.href = "http://ec2-52-91-63-121.compute-1.amazonaws.com/admin/new_race_route.html";
             alert("Successfully uploaded new race!");
         }  
         // ***************************** END ***************************** //
@@ -238,7 +238,7 @@ function exportRace(raceID, routeID, exportingRoute) {
         success: function() {
             if (!exportingRoute) {
                 update_progress_bar(1, 2);
-                window.location.href = "http://0.0.0.0:3000/admin/new_race_route.html";
+                window.location.href = "http://ec2-52-91-63-121.compute-1.amazonaws.com/admin/new_race_route.html";
                 alert("Successfully uploaded new race!");
             }
         }

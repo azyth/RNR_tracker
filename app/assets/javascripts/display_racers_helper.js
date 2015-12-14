@@ -140,8 +140,11 @@ function displayRace(routeId) {
             }
         };
 
+	console.log(routeJSON);	
+
         $.ajax({
             type: 'GET',
+	    async: false,
             url: '/welcome/route_to_points.json',
             data: routeJSON,
             success: function(data) {
@@ -205,7 +208,7 @@ function isRacerActive(e, bool_bibNo, idString, activeList) {
         bibNo = racerJson[bibKey];
 
         if (bool_bibNo[1] == bibNo) {
-            alert("Match bib number for: " + idString);
+            //alert("Match bib number for: " + idString);
             displayBib(bibNo);
             reattachEvents(e);
             return;
@@ -229,7 +232,8 @@ function displayIfActive(e, arg1, arg2, callback) {
     if (raceid.length != 0) {
         $.ajax({
             type: 'GET',
-            url: '/welcome/updated_coords.json',
+            async: false,
+	    url: '/welcome/updated_coords.json',
             data: routeJSON,
             success: function (data) {
                 console.log(data);
@@ -328,6 +332,7 @@ function lookupRacerBib(e, idString, racerList) {
 function displayRacer(e, arg, callback) {
     $.ajax({
         type: 'GET',
+	async: false,
         url: '/racers.json',
         success: function(data) {
             console.log(data);
@@ -419,6 +424,7 @@ function updateCoords() {
         // ajax call to get racers info from another page
         $.ajax({
             type: 'GET',
+	    async: false,
             url: "welcome/updated_coords.json",
             data: routeJSON,
             success: function(data) {
@@ -427,5 +433,5 @@ function updateCoords() {
             }
         });
     }
-    setTimeout(updateCoords, 10000); // update every 10 seconds
+    setTimeout(updateCoords, 7000); // update every 10 seconds
 }

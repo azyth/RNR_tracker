@@ -15,7 +15,7 @@ class WelcomeController < ApplicationController
 
   def updated_coords
     @racers = {}
-    @temp = RaceEvent.find_by_sql(RECENT_UPDATE_QUERY)
+    @temp = RaceEvent.find_by_sql(updated_coords_query(updated_coords_params))
 
     @temp.each do |racer|
       key = racer.bib
@@ -31,6 +31,20 @@ class WelcomeController < ApplicationController
 
   private
   # Never trust parameters from the scary internet, only allow the white list through.
+  def updated_coords_params
+    params.require(:route).permit(:routeid)
+  end
+
+  def updated_coords_query(routeid)
+    %( SELECT r.raceid, r.bib, r.latitude, r.longitude, r.time
+       FROM ( SELECT raceid, bib, MAX(time) AS recentTime
+              FROM race_events
+              WHERE raceid = '#{routeid[:routeid]}'
+              GROUP BY raceid, bib ) tmp
+       JOIN race_events r ON tmp.bib = r.bib
+                          AND tmp.recentTime = r.time; )
+  end
+
   def route_to_points_params
     params.require(:route).permit(:routeid)
   end
